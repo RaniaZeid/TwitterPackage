@@ -6,6 +6,17 @@
 //
 
 import Foundation
-class TweeterPostViewModel{
+
+protocol TwitterPostViewProtocol{
     
+}
+class TwitterPostViewModel{
+    var twitterPostViewProtocol:TwitterPostViewProtocol!
+    // MARK: -Init view Model
+    init(twitterPostViewProtocol:TwitterPostViewProtocol){
+        self.twitterPostViewProtocol = twitterPostViewProtocol
+    }
+    
+    
+  
 }

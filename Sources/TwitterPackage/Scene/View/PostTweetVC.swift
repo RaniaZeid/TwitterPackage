@@ -18,8 +18,8 @@ public class PostTweetVC: UIViewController {
     @IBOutlet weak private var characterRemainingLabel: UILabel!
     @IBOutlet weak private var characterRemainingCountLabel: UILabel!
     @IBOutlet weak private var tweetPostTextView: UITextView!
-    @IBOutlet weak private var copyTextButton: UIButton!
-    @IBOutlet weak private var clearTextButton: UIButton!
+    @IBOutlet weak private (set) var copyTextButton: UIButton!
+    @IBOutlet weak private (set) var clearTextButton: UIButton!
     @IBOutlet weak private var postTweetButton: UIButton!
     @IBOutlet weak private var characterRemainingStack: UIStackView!{
         didSet{
@@ -31,6 +31,8 @@ public class PostTweetVC: UIViewController {
         didSet{
             characterTypedStack.borderColor = .TwitterColor.babyBlue        }
     }
+    
+    var twitterPostViewModel:TwitterPostViewModel!
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: "PostTweetVC", bundle: .module)
@@ -60,24 +62,23 @@ public class PostTweetVC: UIViewController {
         self.tweetPostTextView.textColor = .gray
     }
     
-    
-    public override func viewWillAppear(_ animated: Bool) {
+    // MARK: - View Will Appear...
+    public override func viewWillAppear(_ animated: Bool){
+        self.twitterPostViewModel = TwitterPostViewModel(twitterPostViewProtocol: self)
       tweetPostTextView.delegate = self
-
     }
     // MARK: - copy Tweet Text...
     @IBAction private func copyTweetText(_ sender: Any) {
-        
+        guard let text = self.tweetPostTextView.text else{return}
+              UIPasteboard.general.string = text
     }
-    
     
    // MARK: - clear Tweet Text...
     @IBAction private func clearTweetText(_ sender: Any) {
         self.tweetPostTextView.text = ""
-        self.chatacterTypedCountLabel.text = "0"
+        self.chatacterTypedCountLabel.text = "0/280"
         self.characterRemainingCountLabel.text = "280"
     }
-
     
 }
 extension PostTweetVC : UITextViewDelegate{
@@ -88,11 +89,24 @@ extension PostTweetVC : UITextViewDelegate{
     
     public func textViewDidChange(_ textView: UITextView) {
         let count = textView.text.count
-        if count >= 280 {
+        if count == 0{
+            self.clearTextButton.isEnabled = false
+            self.copyTextButton.isEnabled  = false
+        }
+      else  if count >= 280 {
             self.tweetPostTextView.isUserInteractionEnabled = false
+        }
+        else{
+            self.tweetPostTextView.isUserInteractionEnabled = true
+            self.clearTextButton.isEnabled = true
+            self.copyTextButton.isEnabled  = true
         }
         self.chatacterTypedCountLabel.text = "\(count)"
         self.characterRemainingCountLabel.text = String(280 - count)
 
     }
+}
+extension PostTweetVC : TwitterPostViewProtocol{
+    
+    
 }
