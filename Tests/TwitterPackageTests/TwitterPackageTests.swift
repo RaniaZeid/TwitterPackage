@@ -2,10 +2,43 @@ import XCTest
 @testable import TwitterPackage
 
 final class TwitterPackageTests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(TwitterPackage().text, "Hello, World!")
+    
+    
+    var sut : PostTweetVC!
+    var clearButton : UIButton!
+    var copyButton : UIButton!
+    var tweetTextView : UITextView!
+    
+    // MARK: - Life Cycle...
+    override func setUp() {
+        super.setUp()
+        sut = PostTweetVC()
+        sut.loadViewIfNeeded()
     }
+    override func tearDown(){
+        super.tearDown()
+        sut = nil
+    }
+    
+    // MARK: - Test....
+    func testTextView_When_ClearButtonTapped(){
+        //Given
+    //    clearButton.addTarget(sut,action:#selector(<#T##@objc method#>) , for: .touchUpInside)
+//        let xx = sut.chatacterTypedCountLabel.text
+//        sut.clearTextButton.isUserInteractionEnabled = true
+//        sut.clearTweetText(Any.self)
+//        let text = "0/280"
+  //      XCTAssertEqual(xx, text)
+    }
+    
+    
+    
+    func testTextView_When_CopyButtonTappes(){
+        
+    }
+    
+    
+    
+    
+    
 }
